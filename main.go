@@ -4,11 +4,13 @@ import (
 	"fmt"
 
 	connectDB "github.com/firula-bff/connect"
+	"github.com/firula-bff/initializers"
 	"github.com/gin-gonic/gin"
 )
 
 // Main function
 func init() {
+	initializers.LoadEnv()
 	connectDB.InitConnector()
 }
 
