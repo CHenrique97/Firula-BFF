@@ -1,9 +1,9 @@
 package main
 
 import (
-	"Firula-BFF/services/connect/connectDB"
 	"fmt"
 
+	connectDB "github.com/firula-bff/connect"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +13,7 @@ func init() {
 }
 
 func main() {
+
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
