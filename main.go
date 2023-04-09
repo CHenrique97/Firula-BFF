@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	connectDB "github.com/firula-bff/connect"
+	"github.com/firula-bff/controllers"
 	"github.com/firula-bff/initializers"
 	"github.com/gin-gonic/gin"
 )
@@ -21,6 +22,8 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Hello World")
 	})
+
+	r.GET("/ping", controllers.Migrate)
 
 	r.Run(":8080")
 	fmt.Println("Hello World")
