@@ -23,8 +23,8 @@ func main() {
 		c.String(200, "Hello World")
 	})
 
-	r.GET("/ping", controllers.Migrate)
-
+	r.GET("/migrate", controllers.Migrate)
+	r.POST("/postUser", controllers.PostCreate)
 	r.Run(":8080")
 	fmt.Println("Hello World")
 }

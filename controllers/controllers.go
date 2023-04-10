@@ -6,6 +6,7 @@ import (
 	connectDB "github.com/firula-bff/connect"
 	"github.com/firula-bff/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func Migrate(c *gin.Context) {
@@ -17,8 +18,26 @@ func Migrate(c *gin.Context) {
 }
 
 func PostCreate(c *gin.Context) {
+	var body models.User
+	c.BindJSON(&body)
+
+	post := models.User{
+		ID:       uuid.New().String(),
+		Name:     body.Name,
+		Email:    body.Email,
+		Password: body.Password,
+	}
+
+	result := connectDB.DB.Create(&post)
+	if result.Error != nil {
+
+		c.JSON(400, gin.H{
+			"message": "User could not be created",
+		})
+		return
+	}
 	c.JSON(200, gin.H{
-		"message": "pong",
+		"message": &post,
 	})
 }
 func getRead(c *gin.Context) {
