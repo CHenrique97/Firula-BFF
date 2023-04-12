@@ -9,6 +9,10 @@ import (
 	"github.com/google/uuid"
 )
 
+type Check struct {
+	Result bool
+}
+
 func Migrate(c *gin.Context) {
 	log.Println("Migrating")
 	connectDB.DB.AutoMigrate(&models.User{})
@@ -28,6 +32,26 @@ func PostCreate(c *gin.Context) {
 		Password: body.Password,
 	}
 
+	var check Check
+
+	err := connectDB.DB.Raw("SELECT EXISTS(SELECT 1 FROM `users` WHERE `email` = ?) as result", body.Email).Scan(&check).Error
+	log.Println(check)
+	log.Println(err)
+	if err != nil {
+		// handle error
+		c.JSON(400, gin.H{
+			"message": "User could not be verified",
+		})
+		return
+	}
+
+	if check.Result {
+		c.JSON(400, gin.H{
+			"message": "User could not be created",
+		})
+		return
+	}
+	// use the `result` variable
 	result := connectDB.DB.Create(&post)
 	if result.Error != nil {
 
