@@ -24,6 +24,7 @@ func main() {
 	})
 
 	r.GET("/migrate", controllers.Migrate)
+	r.GET("/getUser", controllers.GetUser)
 	r.POST("/postUser", controllers.PostCreate)
 	r.Run(":8080")
 	fmt.Println("Hello World")

@@ -9,10 +9,12 @@ import (
 	"github.com/google/uuid"
 )
 
+//Check parses the result of the query
 type Check struct {
 	Result bool
 }
 
+//Migrate migrates the database
 func Migrate(c *gin.Context) {
 	log.Println("Migrating")
 	connectDB.DB.AutoMigrate(&models.User{})
@@ -21,6 +23,7 @@ func Migrate(c *gin.Context) {
 	})
 }
 
+//PostCreate creates a new user
 func PostCreate(c *gin.Context) {
 	var body models.User
 	c.BindJSON(&body)
@@ -35,8 +38,7 @@ func PostCreate(c *gin.Context) {
 	var check Check
 
 	err := connectDB.DB.Raw("SELECT EXISTS(SELECT 1 FROM `users` WHERE `email` = ?) as result", body.Email).Scan(&check).Error
-	log.Println(check)
-	log.Println(err)
+
 	if err != nil {
 		// handle error
 		c.JSON(400, gin.H{
@@ -64,16 +66,37 @@ func PostCreate(c *gin.Context) {
 		"message": &post,
 	})
 }
-func getRead(c *gin.Context) {
+
+//GetUser checks if user exists in database
+func GetUser(c *gin.Context) {
+	var body models.User
+	c.BindJSON(&body)
+	user, err := AuthenticateUser(body.Email, body.Password)
+
+	if err != nil {
+		c.JSON(401, gin.H{
+			"message": "Invalid email or password",
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Authentication successful",
+		"user":    user.ID,
+	})
 	c.JSON(200, gin.H{
 		"message": "pong",
 	})
 }
-func putUpdate(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
+func authenticateUser(email string, password string) (models.User, error) {
+	var user models.User
+	result := connectDB.DB.Where("email = ? AND password = ?", email, password).First(&user)
+	if result.Error != nil {
+		return user, result.Error
+	}
+	return user, nil
 }
+
 func postDelete(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
