@@ -3,8 +3,8 @@ package controllers
 import (
 	"log"
 
-	connectDB "github.com/firula-bff/connect"
-	"github.com/firula-bff/models"
+	connectDB "github.com/UserFinder/connect"
+	"github.com/UserFinder/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -71,7 +71,7 @@ func PostCreate(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	var body models.User
 	c.BindJSON(&body)
-	user, err := AuthenticateUser(body.Email, body.Password)
+	user, err := authenticateUser(body.Email, body.Password)
 
 	if err != nil {
 		c.JSON(401, gin.H{

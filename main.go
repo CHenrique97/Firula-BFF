@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
 
-	connectDB "github.com/firula-bff/connect"
-	"github.com/firula-bff/controllers"
-	"github.com/firula-bff/initializers"
+	connectDB "github.com/UserFinder/connect"
+	"github.com/UserFinder/controllers"
+	"github.com/UserFinder/initializers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +27,6 @@ func main() {
 	r.GET("/migrate", controllers.Migrate)
 	r.GET("/getUser", controllers.GetUser)
 	r.POST("/postUser", controllers.PostCreate)
-	r.Run(":8080")
+	r.Run(os.Getenv("port"))
 	fmt.Println("Hello World")
 }

@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/firula-bff/initializers"
+	"github.com/UserFinder/initializers"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
