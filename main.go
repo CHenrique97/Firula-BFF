@@ -24,17 +24,17 @@ func main() {
 		defer conn.Close()
 	
 		// Create a client instance for the UserService
-		client := pb.NewUserServiceClient(conn)
-	
+		user := pb.NewUserServiceClient(conn)
+	    image := pb.NewImageServiceClient(conn)
 		// Example: Create a user
-		req := &pb.UserRequest{
+		reqUser := &pb.UserRequest{
 			Name:     "John Doe",
 			Email:    "john@example.com",
 			Password: "password123",
 		}
 	
 		
-		response, err := client.CreateUser(context.Background(), req)
+		response, err := user.CreateUser(context.Background(), reqUser)
 		if err != nil {
 			log.Fatalf("Failed to create user: %v", err)
 		}
@@ -42,16 +42,20 @@ func main() {
 		log.Printf("User created successfully. ID: %s", response.Id)
 	
 		// Example: Get a user
-		req = &pb.UserRequest{
+		reqUser = &pb.UserRequest{
 			Email:    "john@example.com",
 			Password: "password123",
 		}
 	
-		response, err = client.GetUser(context.Background(), req)
+		response, err = user.CreateUser(context.Background(), reqUser)
 		if err != nil {
 			log.Fatalf("Failed to get user: %v", err)
 		}
-	
+		response, err = user.CreateUser(context.Background(), reqUser)
+		if err != nil {
+			log.Fatalf("Failed to get user: %v", err)
+		}
+	 
 		log.Printf("User retrieved successfully. ID: %s, Name: %s", response.Id, response.Name)
 	
 }
